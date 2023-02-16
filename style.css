@@ -90,6 +90,12 @@
   border-radius: 0.3rem;
 }
 
+.markdown-section strong code {
+  color: #ffcba0;
+  background: #939597;
+  padding: 0;
+}
+
 .markdown-section p code {
   word-break: break-all;
   background: #f5df4d29;
