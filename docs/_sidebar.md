@@ -1,5 +1,6 @@
 <!-- docs/_sidebar.md -->
 
+* [常用操作](docs/commonOperations.md)
 * [前端](docs/frontEnd/)
   * [Git](docs/frontEnd/Git.md)
   * [面试准备](docs/frontEnd/interviewPreparation/)
