@@ -105,3 +105,14 @@
 ul li::marker {
   color: #939597;
 }
+
+.markdown-section a {
+  display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+  max-width: 500px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #f5df4d;
+  text-shadow: 0.1rem 0.1rem #939597;
+}
