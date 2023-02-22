@@ -13,3 +13,5 @@
     * [Vue.js3的设计思路](docs/frontEnd/designAndImplementationOfVue.js/Vue.js3的设计思路.md)
     * [响应系统的作用与实现](docs/frontEnd/designAndImplementationOfVue.js/响应系统的作用与实现.md)
     * [非原始值的响应式方案](docs/frontEnd/designAndImplementationOfVue.js/非原始值的响应式方案.md)
+  * [Vue工程](docs/frontEnd/vueProject)
+    * [Vue3 SSR工程配置](docs/frontEnd/vueProject/Vue3+Vite+ts+pinia+vueuse+Koa2.md)
