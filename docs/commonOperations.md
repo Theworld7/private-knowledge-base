@@ -23,6 +23,12 @@ https://answers.microsoft.com/zh-hans/windows/forum/all/%e5%a6%82%e4%bd%95%e8%bf
 获取最新 Windows 更新：
 https://support.microsoft.com/zh-cn/windows/%E8%8E%B7%E5%8F%96%E6%9C%80%E6%96%B0-windows-%E6%9B%B4%E6%96%B0-7d20e88c-0568-483a-37bc-c3885390d212#WindowsVersion=Windows_10
 
+## cannot be loaded because running scripts is disabled on this system.
+
+```powershell
+set-executionpolicy remotesigned
+```
+
 ## 解决Mac应用无法正常打开
 
 ### 关闭所有校验
