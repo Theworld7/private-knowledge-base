@@ -42,6 +42,15 @@
   position: relative;
 }
 
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3,
+.markdown-section h4,
+.markdown-section h5,
+.markdown-section h6 {
+  font-weight: 500;
+}
+
 .markdown-section h1:before,
 .markdown-section h2:before,
 .markdown-section h3:before,
