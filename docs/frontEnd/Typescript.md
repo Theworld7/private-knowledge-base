@@ -385,3 +385,253 @@ A | B | C extends U ? X : Y  =>
 (A extends U ? X : Y) | (B extends U ? X : Y) | (C extends U ? X : Y)
 ```
 
+### 实例
+
+#### 实现 Extract
+
+`Extract` 用于从联合类型中提取特定类型
+
+```typescript
+type Extract<T, U> = T extends U ? T : never;
+```
+
+#### 实现 NonNullable
+
+`NonNullable` 用于删除联合类型中的 `null` 和 `undefined`
+
+```typescript
+type NonNullable<T> = T extends null | undefined ? never : T;
+```
+
+#### 实现 Record
+
+`Record` 用于生成接口类型的 `Record`, `Record` 接收两个泛型参数：第一个参数作为接口类型的属性，第二个参数是接口类型的属性值
+
+```typescript
+type Record<K extends keyof any, T> = {
+  [P in K]: T;
+};
+// 使用 Record 例子
+type testRecord = Record<string,string>
+```
+
+在 TypeScript 中，keyof any 可以作为对象健的属性
+
+```typescript
+type T = keyof any; // => string|number|symbol
+```
+
+目前，JavaScript 仅支持 string，number，symbol 作为对象的键值
+
+## TS 实现一个 Omit 功能
+
+`Omit` 用来 **删除** 符合类型 `T` 中不需要的属性 `K`，生成新的类型
+
+```typescript
+type Person = {
+  name: string;
+  sex: string;
+};
+type newPerson = Omit<Person, 'name'>; // {sex:string}
+```
+
+### 实现
+
+使用 `Exclude` 结合 `Pick` 实现：首先使用 `keyof` 获取 `T` 中的所有 `key`生成一个`key联合类型`，`Exclude` 删除 `key联合类型`中不需要的 `key`，获取一个新的 `key联合类型`。 然后使用 `Pick` 从 `T` 中捡出需要的 `key`属性，构成一个**新类型**。
+
+```typescript
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+```
+
+### as 语句
+
+`as` 语句的作用：会对**映射类型**中的键进行**重新映射**（TypeScript4.1版本中新增加的语法）
+
+`as` 语句后面新映射类型必须是 `string|number|symbol` **联合类型**的子类型。
+
+```typescript
+type MyOmit<T, K extends keyof T> = {
+[P in keyof T as P extends K ? never : P]: T[P]
+}
+```
+
+`as P` 键重新映射时，`extends` 语法返回 `never` 类型时，该键就会被删除
+
+`as` 语句的一些应用场景，可以利用 `as` 语句定义自己的工具类型,我们可以定义一个 `Getters` 工具类型，用于为对象类型生成对应的 `Getter` 类型： (注：此函数借鉴**阿宝哥**TS 映射类型文章中的一个函数)
+
+```typescript
+type Getters<T> = {
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K]
+};
+interface Person {
+    name: string;
+    age: number;
+    location: string;
+}
+type LazyPerson = Getters<Person>;
+// LazyPerson 打印结果
+// {
+//   getName: () => string;
+//   getAge: () => number;
+//   getLocation: () => string;
+// }
+```
+
+### 实例
+
+#### 实现 CustomRequired
+
+有一个如下接口，我想要把其中**某个属性**修改为必填(非可选)
+
+```typescript
+interface User {
+  name?: string;
+  age?: number;
+  hobby?: string;
+}
+```
+
+使用 TS 的类型实现
+
+```typescript
+type CustomRequired<T, K extends keyof T> = Omit<T, K> &
+  {
+    [P in K]-?: T[P];   // 映射类型
+  };
+```
+
+使用方式
+
+```typescript
+type SpecialUser = CustomRequired<User,name>
+// 打印结果
+// interface User {
+//  name: string;
+//  age?: number;
+//  hobby?: string;
+//}
+```
+
+1. `CustomRequired` 先使用 `Omit` 删除要改为必填的属性返回一个新的 `interface`。例子中先从 `User` 中却掉 `name` 属性。
+2. 再与一个不可选的 `name` 接口进行 `&` 合并。
+
+## TS 实现一个 ReturnType
+
+`ReturnType` 接收一个函数类型作为参数，推断出函数的`返回值类型`。 
+
+```typescript
+type ReturnType1 = ReturnType<() => number>; // number
+type ReturnType2 = ReturnType<(s: string) => void>; // void
+type ReturnType3 = ReturnType<typeof Math.random>; // number
+type ReturnType4 = ReturnType<typeof Array.isArray>; // boolean
+```
+
+### 源码实现
+
+```typescript
+/**
+ * Obtain the return type of a function type
+ */
+type ReturnType<T extends (...args: any[]) => any> = T extends (...args: any[]) => infer R ? R : any;
+```
+
+源码实现中 `ReturnType` 的泛型参数约束为 **函数类型**，如果 `T` 满足约束，会通过 `infer` 关键字推断出函数返回类型为 `R`，否则返回 `any` 类型。
+
+### infer
+
+`infer` 的英文意思：推断`infer` 是 `typescript 2.8`中新增的关键字。可以**结合** `extends`条件语句推断待推断的类型。
+
+`ReturnType` 的源码实现直接看好像有些复杂, 我们先从简单的内容来，`infer` 在没有出现之前，我们想推断一个数组中元素的类型怎么做？
+
+```typescript
+type Uuids = number[];
+type Names = string[];
+// 等等数组类型 Symbol[] 等 
+type Unpacked<T> = T extends Uuids ? number : T extends Names ? string : T; // 请注意，如果有多种数组类型，这个条件语句可能要一直?下去
+type UuidType = Unpacked<Uuids>; // UuidType 的类型为 number
+type NameType = Unpacked<Names>; // NameType 的类型为 string
+```
+
+通过上面这种 `Unpacked`，我们需要条件语句判断各种不同的类型，一直写下去
+
+有了 `infer` 关键字之后，修改一下代码
+
+```typescript
+type Uuids = number[];
+type Names = string[];
+type Unpacked<T> = T extends (infer R)[] ? R : T;
+type UuidType = Unpacked<Uuids>; // UuidType 的类型为 number
+type NameType = Unpacked<Names>; // NameType 的类型为 string
+```
+
+`T extends (infer R)[] ? R : T` 使用条件语句，如果 `T` 是某个待推断类型的数组，则返回推断的类型，否则返回 `T`。 看完这个例子再回去看 `ReturnType<T>` 的实现，`ReturnType<T>` 只是将 `infer P` 从参数位置移动到返回值位置，因此此时 `P` 即是表示待推断的返回值类型。
+
+使用 `infer` 获取 `Promise<xxx>` 类型中 `xxx` 类型, 也比较常用
+
+```typescript
+type Res = Promise<number[]>;
+type Unpacked<T> = T extends Promise<infer R> ? R : T;
+type resType = Unpacked<Res>; // resType 类型为number[]
+```
+
+`infer` 使用条件
+
+官方文档中的有说明：
+
+```
+Within the extends clause of a conditional type, it is now possible to have infer declarations that introduce a type variable to be inferred. Such inferred type variables may be referenced in the true branch of the conditional type. It is possible to have multiple infer locations for the same type variable.
+```
+
+`infer` 需要在条件类型的 `extends` **子句**中，推断的**类型变量**需要可以在条件类型的 `true` 分支中引用。
+
+### 实现 PropertyType
+
+`PropertyType` 用于推断出类型中键的类型。
+
+```typescript
+type UserInfo = {
+  id: number;
+  userName: string;
+  userAvatar: string;
+}
+type PropertyType<T> = T extends {id: infer U, userName: infer R, userAvatar: infer K} ? [U,R,K]:T;
+// 使用PropertyType
+type TestProperty = PropertyType<UserInfo>;// [number,string,string]
+```
+
+通过 `infer` 声明了类型变量 `U R K` ，分表表示对象类型中`id userName userAvatar` 属性要推断的类型。若类型匹配，满足条件语句的 `true` 条件，会以**元组**的形式返回 `id userName userAvatar` 属性的类型 `[number,string,string]`
+
+### 实现 ConstructorParameters
+
+`ConstructorParameters` 用于获取类中构造函数的参数类型 代码实现
+
+```typescript
+type ConstructorParameters<T extends new (...args: any[]) => any> = T extends new (...args: infer P) => any
+  ? P
+  : never;
+class TestClass {
+  constructor(public name: string, public age: number) {}
+}
+type Params = ConstructorParameters<typeof TestClass>; // [string, number]
+```
+
+`ConstructorParameters` 的参数 `T extends new (...args: any[]) => any` ，是对构造函数的类型约束。作用于构造函数的参数位置`T extends new (...args: infer P) => any` ，可推断构造函数参数类型
+
+```typescript
+// 构造函数
+type Constructor = new (..args:any[]) => any;
+```
+
+### 实现 InstanceType
+
+`InstanceType` 用于获取实例类型
+
+```typescript
+type InstanceType<T extends new (...args: any[]) => any> = T extends new (...args: any[]) => infer R ? R : any;
+class TestClass {
+  constructor(public name: string, public age: number) {}
+}
+type Instance = InstanceType<typeof TestClass>; // TestClass
+```
+
+作用于构造函数的返回值位置`new (...args: any[]) => infer P;` ，可推断构造函数实例类型
