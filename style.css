@@ -1,45 +1,46 @@
 .sidebar {
-  border-color: #939597;
+    border-color: #939597;
 }
 
 .sidebar-toggle {
-  background-color: unset;  
+    background-color: unset;
 }
 
-.sidebar ul li.active>a {
-  color: #939597;
-  border-color: #F5DF4D;
+.sidebar ul li.active > a {
+    color: #939597;
+    border-color: #f5df4d;
 }
 
 .sidebar-toggle span {
-  background: #939597;
-  box-shadow: 0.1rem 0.1rem #F5DF4D;
-  transition: all .5s;
+    background: #939597;
+    box-shadow: 0.1rem 0.1rem #f5df4d;
+    transition: all 0.5s;
 }
 
 .sidebar-toggle:hover span {
-  background: #F5DF4D;
-  box-shadow: -0.1rem -0.1rem #939597;
+    background: #f5df4d;
+    box-shadow: -0.1rem -0.1rem #939597;
 }
 
 .sidebar-toggle:hover .sidebar-toggle-button {
-  opacity: unset;
+    opacity: unset;
 }
 
 .markdown-section table thead {
-  background: #939597;
+    background: #939597;
 }
 
 .markdown-section table thead tr th {
-  color: #fff;
+    color: #fff;
 }
 
-.markdown-section td, .markdown-section th {
-  border-color: #939597;
+.markdown-section td,
+.markdown-section th {
+    border-color: #939597;
 }
 
 .markdown-section h1 {
-  position: relative;
+    position: relative;
 }
 
 .markdown-section h1:before,
@@ -48,72 +49,71 @@
 .markdown-section h4:before,
 .markdown-section h5:before,
 .markdown-section h6:before {
-  position: absolute;
-  color: #939597;
-  text-shadow: 0.1rem 0.1rem #F5DF4D;
+    position: absolute;
+    color: #939597;
+    text-shadow: 0.1rem 0.1rem #f5df4d;
 }
 
 .markdown-section h1:before {
-  content: 'H1';
-  top: 0.3rem;
-  left: -3rem;
-  font-size: 1.6rem;
+    content: 'H1';
+    top: 0.3rem;
+    left: -3rem;
+    font-size: 1.6rem;
 }
 
 .markdown-section h2 {
-  position: relative;
+    position: relative;
 }
 
 .markdown-section h2:before {
-  content: 'H2';
-  top: 0.25rem;
-  left: -2.8rem;
-  font-size: 1.4rem;
+    content: 'H2';
+    top: 0.25rem;
+    left: -2.8rem;
+    font-size: 1.4rem;
 }
 
 .markdown-section h3 {
-  position: relative;
+    position: relative;
 }
 
 .markdown-section h3:before {
-  content: 'H3';
-  top: 0.2rem;
-  left: -2.6rem;
-  font-size: 1.2rem;
+    content: 'H3';
+    top: 0.2rem;
+    left: -2.6rem;
+    font-size: 1.2rem;
 }
 
 .markdown-section strong {
-  color: #F5DF4D;
-  padding: 0.1rem 0.2rem;
-  margin: 0 0.1rem;
-  background: #939597;
-  border-radius: 0.3rem;
+    color: #f5df4d;
+    padding: 0.1rem 0.2rem;
+    margin: 0 0.1rem;
+    background: #939597;
+    border-radius: 0.3rem;
 }
 
 .markdown-section strong code {
-  color: #ffcba0;
-  background: #939597;
-  padding: 0;
+    color: #ffcba0;
+    background: #939597;
+    padding: 0;
 }
 
 .markdown-section p code {
-  word-break: break-all;
-  background: #f5df4d29;
-  border-radius: 0.3rem;
+    word-break: break-all;
+    background: #f5df4d29;
+    border-radius: 0.3rem;
 }
 
 ul li::marker {
-  color: #939597;
+    color: #939597;
 }
 
 .markdown-section a {
-  display: -webkit-box;
-      -webkit-line-clamp: 1;
-      -webkit-box-orient: vertical;
-  max-width: 500px;
-  font-weight: 400;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: #f5df4d;
-  text-shadow: 0.1rem 0.1rem #939597;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    max-width: 500px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #f5df4d;
 }
